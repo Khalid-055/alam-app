@@ -74,11 +74,12 @@ button{font:inherit;cursor:pointer}
 .hero h2{margin:0 0 5px}
 .muted{color:var(--muted);font-size:13px;line-height:1.5}
 .chips{
-  display:flex;
+    display:flex;
+  flex-wrap:wrap;
   gap:8px;
-  overflow:auto;
-  margin:13px -16px;
-  padding:0 16px
+  margin:13px 0;
+  padding:0;
+  overflow:hidden;
 }
 .chip{
   white-space:nowrap;
