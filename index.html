@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0F5C5B">
+<title>عالم V3</title>
+
+<style>
+:root{
+  --bg:#f5f8f7;
+  --card:#fff;
+  --ink:#162725;
+  --muted:#6e7c79;
+  --line:#e3eae8;
+  --brand:#0F5C5B;
+  --soft:#e5f3f1;
+  --gold:#bd7d22
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  background:#e9efee;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--ink)
+}
+body{display:flex;justify-content:center}
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  background:var(--bg);
+  position:relative
+}
+.screen{
+  display:none;
+  min-height:100vh;
+  padding:calc(env(safe-area-inset-top) + 14px) 16px 92px
+}
+.active{display:block}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.top h1{flex:1;margin:0;font-size:27px}
+button{font:inherit;cursor:pointer}
+.round,.back{
+  border:0;
+  background:#e8eeee;
+  border-radius:13px;
+  height:42px;
+  padding:0 13px
+}
+.search{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:12px 14px
+}
+.search input{
+  border:0;
+  outline:0;
+  width:100%;
+  font-size:15px;
+  background:transparent
+}
+.hero{
+  background:linear-gradient(135deg,#dff2ef,#fff6e8);
+  border:1px solid var(--line);
+  border-radius:23px;
+  padding:18px;
+  margin:14px 0
+}
+.hero h2{margin:0 0 5px}
+.muted{color:var(--muted);font-size:13px;line-height:1.5}
+.chips{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin:13px -16px;
+  padding:0 16px
+}
+.chip{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:999px;
+  padding:8px 12px
+}
+.chip.on{
+  background:var(--brand);
+  color:white;
+  border-color:var(--brand)
+}
+.card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:19px;
+  padding:13px;
+  margin:9px 0
+}
+.row{display:flex;gap:11px;align-items:center}
+.avatar{
+  width:58px;
+  height:58px;
+  border-radius:17px;
+  background:var(--soft);
+  display:grid;
+  place-items:center;
+  font-size:27px;
+  flex:0 0 auto
+}
+.grow{flex:1}
+h3{margin:0 0 5px;font-size:16px}
+.rating{font-size:13px;color:var(--gold);font-weight:800}
+.address{font-size:12px;color:var(--muted);margin-top:4px}
+.detailHero{
+  height:220px;
+  border-radius:25px;
+  background:linear-gradient(145deg,#d9be98,#8b684c,#28565b);
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:65px
+}
+.title{font-size:23px;font-weight:900;margin:18px 0 4px}
+.info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:14px 0
+}
+.info div{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:11px;
+  font-size:12px
+}
+.info b{display:block;margin-bottom:5px;font-size:13px}
+.actions{display:flex;gap:8px;margin:12px 0}
+.actions button{
+  flex:1;
+  border:0;
+  border-radius:14px;
+  padding:11px 4px;
+  background:#e7edec;
+  font-size:12px
+}
+.actions .primary{background:var(--brand);color:white}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(430px,100%);
+  height:76px;
+  background:white;
+  border-top:1px solid var(--line);
+  display:flex
+}
+.nav button{
+  flex:1;
+  border:0;
+  background:none;
+  font-size:11px;
+  color:#75827f
+}
+.nav b{display:block;font-size:20px;margin-bottom:3px}
+.empty{text-align:center;color:var(--muted);padding:45px 15px}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<section id="browse" class="screen active">
+
+<div class="top">
+<h1>عالم 🌍</h1>
+<button class="round" onclick="toggleLang()">🌐</button>
+</div>
+
+<div class="search">
+🔎
+<input id="search" placeholder="ابحث عن مطعم، مقهى أو معلم في جدة...">
+</div>
+
+<div class="hero">
+<h2 id="heroTitle">اكتشف جدة</h2>
+<div class="muted" id="heroSub">
+مطاعم ومقاهي ومعالم مميزة في مكان واحد.
+</div>
+</div>
+
+<div class="chips">
+<button class="chip on" onclick="filterType('all',this)">الكل</button>
+<button class="chip" onclick="filterType('restaurant',this)">🍽️ مطاعم</button>
+<button class="chip" onclick="filterType('cafe',this)">☕ مقاهي</button>
+<button class="chip" onclick="filterType('attraction',this)">⭐ معالم</button>
+</div>
+
+<div id="list"></div>
+
+</section>
+
+<section id="detail" class="screen">
+
+<div class="top">
+<button class="back" onclick="goBrowse()">‹</button>
+<h1 id="detailHeading">تفاصيل المكان</h1>
+</div>
+
+<div class="detailHero" id="emoji">📍</div>
+
+<div class="title" id="name"></div>
+<div class="muted" id="category"></div>
+<div id="rate" class="rating"></div>
+
+<div class="actions">
+<button class="primary" onclick="directions()">🧭 <span id="dirText">الاتجاهات</span></button>
+<button onclick="callPlace()">☎️ <span id="callText">اتصال</span></button>
+<button onclick="fav()">♡ <span id="favText">مفضلة</span></button>
+</div>
+
+<div class="info">
+<div><b id="addressLabel">العنوان</b><span id="address"></span></div>
+<div><b id="hoursLabel">ساعات العمل</b><span id="hours"></span></div>
+<div><b id="reviewsLabel">التقييمات</b><span id="reviews"></span></div>
+<div><b id="phoneLabel">الهاتف</b><span id="phone"></span></div>
+</div>
+
+</section>
+
+<section id="favorites" class="screen">
+<div class="top"><h1 id="favoritesTitle">المفضلة</h1></div>
+<div id="favList"></div>
+</section>
+
+<nav class="nav">
+<button onclick="goBrowse()"><b>⌂</b><span id="homeText">استكشاف</span></button>
+<button onclick="showFavorites()"><b>♡</b><span id="navFav">المفضلة</span></button>
+<button onclick="toggleLang()"><b>🌐</b><span id="langText">اللغة</span></button>
+</nav>
+
+</div>
+
+<script>
+const places=[
+{
+id:1,
+ar:"ميازُو جدة",
+en:"Myazu Jeddah",
+emoji:"🍣",
+type:"restaurant",
+category_ar:"مطعم ياباني",
+category_en:"Japanese restaurant",
+rating:4.5,
+reviews:5431,
+address:"الروضة، جدة",
+phone:"+966920010434",
+hours:"13:00–01:30",
+query:"Myazu Jeddah"
+},
+{
+id:2,
+ar:"شانغ بالاس",
+en:"Shang Palace",
+emoji:"🍽️",
+type:"restaurant",
+category_ar:"مطعم",
+category_en:"Restaurant",
+rating:4.8,
+reviews:2043,
+address:"الشاطئ، جدة",
+phone:"+9668004408888",
+hours:"16:00–23:30",
+query:"Shang Palace Jeddah"
+},
+{
+id:3,
+ar:"تكساس رودهاوس",
+en:"Texas Roadhouse",
+emoji:"🥩",
+type:"restaurant",
+category_ar:"مطعم شرائح لحم",
+category_en:"Steakhouse",
+rating:4.5,
+reviews:9937,
+address:"الأندلس، جدة",
+phone:"+966122617026",
+hours:"11:00–01:00",
+query:"Texas Roadhouse Jeddah"
+},
+{
+id:4,
+ar:"كوب وكنبة",
+en:"Cup & Couch",
+emoji:"☕",
+type:"cafe",
+category_ar:"مقهى ومحمصة",
+category_en:"Cafe & Roastery",
+rating:4.7,
+reviews:12335,
+address:"السلامة، جدة",
+phone:"+966551199205",
+hours:"06:30–00:30",
+query:"Cup and Couch Jeddah"
+},
+{
+id:5,
+ar:"هيمي كافيه",
+en:"Hemi Cafe",
+emoji:"☕",
+type:"cafe",
+category_ar:"مقهى",
+category_en:"Cafe",
+rating:4.5,
+reviews:2627,
+address:"الزهراء، جدة",
+phone:"+966552121165",
+hours:"06:30–01:00",
+query:"Hemi Cafe Jeddah"
+},
+{
+id:6,
+ar:"كافيسيتو",
+en:"Cafecito",
+emoji:"☕",
+type:"cafe",
+category_ar:"مقهى",
+category_en:"Cafe",
+rating:4.9,
+reviews:1123,
+address:"الحمراء، جدة",
+phone:"+966558899379",
+hours:"08:00–03:00",
+query:"Cafecito Jeddah"
+},
+{
+id:7,
+ar:"نافورة الملك فهد",
+en:"King Fahd's Fountain",
+emoji:"⛲",
+type:"attraction",
+category_ar:"معلم سياحي",
+category_en:"Tourist attraction",
+rating:4.5,
+reviews:12428,
+address:"جدة",
+phone:"",
+hours:"مساءً",
+query:"King Fahd Fountain Jeddah"
+},
+{
+id:8,
+ar:"واجهة جدة البحرية",
+en:"Jeddah Waterfront",
+emoji:"🌊",
+type:"attraction",
+category_ar:"واجهة بحرية",
+category_en:"Waterfront",
+rating:4.7,
+reviews:19136,
+address:"كورنيش جدة",
+phone:"",
+hours:"مفتوح 24 ساعة",
+query:"Jeddah Waterfront"
+},
+{
+id:9,
+ar:"بيت نصيف",
+en:"Nassif House",
+emoji:"🏛️",
+type:"attraction",
+category_ar:"متحف ومعلم تاريخي",
+category_en:"Historic attraction",
+rating:4.4,
+reviews:5962,
+address:"جدة التاريخية",
+phone:"",
+hours:"09:00–23:00",
+query:"Nassif House Jeddah"
+}
+];
+
+let lang=localStorage.getItem("alam_lang")||"ar";
+let type="all";
+let current=null;
+let favorites=JSON.parse(localStorage.getItem("alam_favs")||"[]");
+
+function L(ar,en){
+return lang==="ar"?ar:en;
+}
+
+function render(){
+const q=document.getElementById("search").value.trim().toLowerCase();
+
+const rows=places.filter(p=>
+(type==="all"||p.type===type)&&
+(!q||[
+p.ar,p.en,p.category_ar,p.category_en,p.address
+].join(" ").toLowerCase().includes(q))
+);
+
+document.getElementById("list").innerHTML=
+rows.length
+?rows.map(p=>`
+<div class="card" onclick="openPlace(${p.id})">
+<div class="row">
+<div class="avatar">${p.emoji}</div>
+<div class="grow">
+<h3>${L(p.ar,p.en)}</h3>
+<div class="rating">★ ${p.rating} (${p.reviews.toLocaleString()})</div>
+<div class="address">${L(p.category_ar,p.category_en)} • ${p.address}</div>
+</div>
+</div>
+</div>
+`).join("")
+:`<div class="empty">${L("لا توجد نتائج","No results")}</div>`;
+}
+
+function filterType(t,el){
+type=t;
+document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+el.classList.add("on");
+render();
+}
+
+document.getElementById("search").addEventListener("input",render);
+
+function openPlace(id){
+current=places.find(p=>p.id===id);
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+document.getElementById("detail").classList.add("active");
+fillDetail();
+window.scrollTo(0,0);
+}
+
+function fillDetail(){
+if(!current)return;
+document.getElementById("emoji").textContent=current.emoji;
+document.getElementById("name").textContent=L(current.ar,current.en);
+document.getElementById("category").textContent=L(current.category_ar,current.category_en);
+document.getElementById("rate").textContent=`★ ${current.rating} (${current.reviews.toLocaleString()})`;
+document.getElementById("address").textContent=current.address;
+document.getElementById("hours").textContent=current.hours;
+document.getElementById("reviews").textContent=current.reviews.toLocaleString();
+document.getElementById("phone").textContent=current.phone||L("غير متوفر","Not available");
+}
+
+function goBrowse(){
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+document.getElementById("browse").classList.add("active");
+render();
+window.scrollTo(0,0);
+}
+
+function directions(){
+if(!current)return;
+window.open(
+"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(current.query),
+"_blank"
+);
+}
+
+function callPlace(){
+if(current&&current.phone){
+location.href="tel:"+current.phone;
+}
+}
+
+function fav(){
+if(!current)return;
+const i=favorites.indexOf(current.id);
+if(i>=0){
+favorites.splice(i,1);
+}else{
+favorites.push(current.id);
+}
+localStorage.setItem("alam_favs",JSON.stringify(favorites));
+alert(L("تم تحديث المفضلة","Favorites updated"));
+}
+
+function showFavorites(){
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+document.getElementById("favorites").classList.add("active");
+
+const arr=places.filter(p=>favorites.includes(p.id));
+
+document.getElementById("favList").innerHTML=
+arr.length
+?arr.map(p=>`
+<div class="card" onclick="openPlace(${p.id})">
+<div class="row">
+<div class="avatar">${p.emoji}</div>
+<div>
+<h3>${L(p.ar,p.en)}</h3>
+<div class="rating">★ ${p.rating}</div>
+</div>
+</div>
+</div>
+`).join("")
+:`<div class="empty">${L("لا توجد أماكن محفوظة","No saved places")}</div>`;
+}
+
+function toggleLang(){
+lang=lang==="ar"?"en":"ar";
+localStorage.setItem("alam_lang",lang);
+applyLang();
+}
+
+function applyLang(){
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+
+document.getElementById("search").placeholder=
+L("ابحث عن مطعم، مقهى أو معلم في جدة...","Search Jeddah places...");
+
+document.getElementById("heroTitle").textContent=
+L("اكتشف جدة","Explore Jeddah");
+
+document.getElementById("heroSub").textContent=
+L("مطاعم ومقاهي ومعالم مميزة في مكان واحد.","Restaurants, cafes and attractions in one place.");
+
+document.getElementById("detailHeading").textContent=L("تفاصيل المكان","Place details");
+document.getElementById("dirText").textContent=L("الاتجاهات","Directions");
+document.getElementById("callText").textContent=L("اتصال","Call");
+document.getElementById("favText").textContent=L("مفضلة","Favorite");
+document.getElementById("addressLabel").textContent=L("العنوان","Address");
+document.getElementById("hoursLabel").textContent=L("ساعات العمل","Hours");
+document.getElementById("reviewsLabel").textContent=L("التقييمات","Reviews");
+document.getElementById("phoneLabel").textContent=L("الهاتف","Phone");
+document.getElementById("favoritesTitle").textContent=L("المفضلة","Favorites");
+document.getElementById("homeText").textContent=L("استكشاف","Explore");
+document.getElementById("navFav").textContent=L("المفضلة","Favorites");
+document.getElementById("langText").textContent=L("اللغة","Language");
+
+render();
+fillDetail();
+}
+
+applyLang();
+render();
+</script>
+
+</body>
+</html>
