@@ -75,11 +75,14 @@ button{font:inherit;cursor:pointer}
 .muted{color:var(--muted);font-size:13px;line-height:1.5}
 .chips{
     display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:13px 0;
-  padding:0;
-  overflow:hidden;
+    flex-wrap:nowrap;
+    gap:8px;
+    margin:13px 0;
+    padding:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    width:100%;
+    max-width:100%;
 }
 .chip{
   white-space:nowrap;
