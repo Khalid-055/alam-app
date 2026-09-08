@@ -495,10 +495,16 @@ function showHeroSlide(index){
   hero.classList.add("fade");
 }
 
-setInterval(()=>{
-  heroIndex = (heroIndex + 1) % heroSlides.length;
-  showHeroSlide(heroIndex);
-},4000);
+window.addEventListener("load", function(){
+
+  showHeroSlide(0);
+
+  setInterval(function(){
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+    showHeroSlide(heroIndex);
+  },4000);
+
+});
 let lang=localStorage.getItem("alam_lang")||"ar";
 let type="all";
 let current=null;
