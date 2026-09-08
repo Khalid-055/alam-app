@@ -505,6 +505,30 @@ window.addEventListener("load", function(){
   },4000);
 
 });
+let touchStartX = 0;
+let touchEndX = 0;
+
+const heroBox = document.querySelector(".hero");
+
+heroBox.addEventListener("touchstart", function(e){
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+heroBox.addEventListener("touchend", function(e){
+  touchEndX = e.changedTouches[0].screenX;
+
+  const swipeDistance = touchEndX - touchStartX;
+
+  if(Math.abs(swipeDistance) < 50) return;
+
+  if(swipeDistance < 0){
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+  }else{
+    heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
+  }
+
+  showHeroSlide(heroIndex);
+});
 let lang=localStorage.getItem("alam_lang")||"ar";
 let type="all";
 let current=null;
