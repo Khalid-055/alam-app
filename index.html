@@ -505,13 +505,37 @@ window.addEventListener("load", function(){
   },4000);
 
 });
-let touchStartX = 0;
-let touchEndX = 0;
+let touchStartX = null;
 
 const heroBox = document.querySelector(".hero");
 
 heroBox.addEventListener("touchstart", function(e){
-  touchStartX = e.changedTouches[0].screenX;
+  touchStartX = e.touches[0].clientX;
+}, {passive:true});
+
+heroBox.addEventListener("touchend", function(e){
+  if(touchStartX === null) return;
+
+  const touchEndX = e.changedTouches[0].clientX;
+  const deltaX = touchEndX - touchStartX;
+
+  if(Math.abs(deltaX) < 50){
+    touchStartX = null;
+    return;
+  }
+
+  // سحب لليسار = التالي
+  if(deltaX < 0){
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+  }
+
+  // سحب لليمين = السابق
+  if(deltaX > 0){
+    heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
+  }
+
+  showHeroSlide(heroIndex);
+  touchStartX = null;
 });
 
 heroBox.addEventListener("touchend", function(e){
