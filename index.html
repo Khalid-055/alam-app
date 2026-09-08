@@ -448,7 +448,57 @@ hours:"09:00–23:00",
 query:"Nassif House Jeddah"
 }
 ];
+const heroSlides = [
+  {
+    badge:"✨ جديد",
+    title:"اكتشف جدة",
+    sub:"أفضل المطاعم والمقاهي والمعالم والفنادق في مكان واحد."
+  },
+  {
+    badge:"🍽️ مميز",
+    title:"أفضل المطاعم",
+    sub:"اختيارات مميزة وتجارب تستحق الزيارة."
+  },
+  {
+    badge:"☕ اليوم",
+    title:"مقاهي مختارة",
+    sub:"أماكن هادئة وجلسات جميلة في جدة."
+  },
+  {
+    badge:"⭐ اكتشف",
+    title:"معالم تستحق الزيارة",
+    sub:"اكتشف أجمل الأماكن والمعالم حولك."
+  }
+];
 
+let heroIndex = 0;
+
+function showHeroSlide(index){
+  const hero = document.querySelector(".hero");
+  const badge = document.querySelector(".hero-badge");
+  const title = document.getElementById("heroTitle");
+  const sub = document.getElementById("heroSub");
+  const dots = document.querySelectorAll(".hero-dot");
+
+  heroIndex = index;
+
+  badge.textContent = heroSlides[index].badge;
+  title.textContent = heroSlides[index].title;
+  sub.textContent = heroSlides[index].sub;
+
+  dots.forEach((dot,i)=>{
+    dot.classList.toggle("active", i === index);
+  });
+
+  hero.classList.remove("fade");
+  void hero.offsetWidth;
+  hero.classList.add("fade");
+}
+
+setInterval(()=>{
+  heroIndex = (heroIndex + 1) % heroSlides.length;
+  showHeroSlide(heroIndex);
+},4000);
 let lang=localStorage.getItem("alam_lang")||"ar";
 let type="all";
 let current=null;
