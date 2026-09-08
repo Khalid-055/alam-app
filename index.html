@@ -520,12 +520,11 @@ heroBox.addEventListener("touchend", function(e){
   const swipeDistance = touchEndX - touchStartX;
 
   if(Math.abs(swipeDistance) < 50) return;
-
-  if(swipeDistance < 0){
-    heroIndex = (heroIndex + 1) % heroSlides.length;
-  }else{
-    heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
-  }
+if(swipeDistance > 0){
+  heroIndex = (heroIndex + 1) % heroSlides.length;
+}else{
+  heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
+}
 
   showHeroSlide(heroIndex);
 });
