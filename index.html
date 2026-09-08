@@ -72,6 +72,45 @@ button{font:inherit;cursor:pointer}
   margin:14px 0
 }
 .hero h2{margin:0 0 5px}
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:125px;
+}
+.hero-badge{
+  font-size:13px;
+  margin-bottom:5px;
+}
+.hero.fade{
+  animation:heroFade .45s ease;
+}
+@keyframes heroFade{
+  from{
+    opacity:.35;
+    transform:translateY(4px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+.hero-dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:8px;
+}
+.hero-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#c9d1d0;
+}
+.hero-dot.active{
+  width:18px;
+  border-radius:10px;
+  background:#1f6665;
+}
 .muted{color:var(--muted);font-size:13px;line-height:1.5}
 .chips{
   display:grid;
